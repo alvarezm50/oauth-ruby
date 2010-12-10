@@ -41,6 +41,19 @@ module OAuth
           values.sort.collect do |v|
             [escape(k),escape(v)] * "="
           end
+        elsif values.is_a?(Hash)
+          # we have an array element
+          # such as size[0]=5
+          # stored as a hash with the
+          # as key, value where key
+          # is the element name and
+          # value is a hash with the
+          # bracked part as the key
+          # giving the value
+          # so for size[0]=5 we
+          # get key: 0, value:5
+          varray = values.first # convert hash to array of 2 elements
+          [escape("#{k}[#{varray[0]}]"), escape(varray[1])] * "="
         else
           [escape(k),escape(values)] * "="
         end
